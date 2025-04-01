@@ -1,0 +1,5 @@
+llm:
+  model: "gemma2-9b-it"
+  temperature: 0
+  top_p: 1
+  max_tokens: 1024
