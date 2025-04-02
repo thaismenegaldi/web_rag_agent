@@ -7,6 +7,6 @@ class Prompt(BaseModel):
     name: str
     prompt_template: str
 
-    def format(self, fields: Dict[str, str] | None) -> str:
+    def format(self, fields: Dict[str, str] = None) -> str:
         fields = fields or {}
         return self.prompt_template.format(**fields)
