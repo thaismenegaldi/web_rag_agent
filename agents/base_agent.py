@@ -11,11 +11,11 @@ class BaseAgent(ABC):
         self.chat_client = GroqChatClient(config_path=config_path)
 
     @abstractmethod
-    def get_system_prompt(self) -> Dict[str, str]:
+    def get_system_message(self) -> Dict[str, str]:
         pass
 
     @abstractmethod
-    def get_user_prompt(self, **kwargs) -> Dict[str, str]:
+    def get_user_message(self, **kwargs) -> Dict[str, str]:
         pass
 
     @abstractmethod
