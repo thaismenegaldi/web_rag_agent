@@ -1,14 +1,17 @@
 from glob import glob
 from tqdm import tqdm
+from pathlib import Path
 from langchain_community.document_loaders import PyPDFLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.vectorstores import FAISS
 from langchain_community.embeddings import HuggingFaceEmbeddings
+from ..utils.load_config import load_yaml_config
 
 
 class VectorRetriever:
-    def __init__(self, path_to_data):
+    def __init__(self, path_to_data: Path, config_path: Path):
         self.path_to_data = path_to_data
+        self.config = load_yaml_config(config_path)
 
     def load_data(self):
         files = glob(f"{self.path_to_data}/*.pdf")
@@ -27,12 +30,13 @@ class VectorRetriever:
         progress_bar.close()
 
         text_splitter = RecursiveCharacterTextSplitter(
-            chunk_size=500, chunk_overlap=50
+            chunk_size=self.config["retriever"]["chunk_size"],
+            chunk_overlap=self.config["retriever"]["chunk_overlap"]
         )
         texts = text_splitter.split_documents(documents)
 
         embeddings = HuggingFaceEmbeddings(
-            model_name="sentence-transformers/all-mpnet-base-v2"
+            model_name=self.config["retriever"]["model"],
         )
 
         vectorstore = FAISS.from_documents(texts, embeddings)
