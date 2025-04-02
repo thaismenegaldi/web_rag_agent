@@ -26,14 +26,14 @@ class GroqChatClient:
     def generate_response(self, system_message: str, user_message: str):
         try:
             response = self.groq_client.chat.completions.create(
-                model=self.config["model"],
+                model=self.config["llm"]["model"],
                 messages=[
                     system_message,
                     user_message
                 ],
-                temperature=self.config["temperature"],
-                top_p=self.config["top_p"],
-                max_tokens=self.config["max_tokens"]
+                temperature=self.config["llm"]["temperature"],
+                top_p=self.config["llm"]["top_p"],
+                max_tokens=self.config["llm"]["max_tokens"]
             )
 
             return response.choices[0].message.content
