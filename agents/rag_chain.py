@@ -17,19 +17,21 @@ class RetrievalAugmentedGenerator:
         return context if context else "No relevant context found."
 
     def get_system_message(self) -> Dict[str, str]:
+        prompt_content = QEA_SYSTEM_PROMPT.format(fields=None)
         system_message = {
-            "role": "system",
-            "content": QEA_SYSTEM_PROMPT
+            "role": QEA_SYSTEM_PROMPT.role,
+            "content": prompt_content
         }
         return system_message
 
     def get_user_message(self, question: str, context: str) -> Dict[str, str]:
+        prompt_content = QEA_USER_PROMPT.format({
+            "question": question,
+            "context": context
+        })
         user_message = {
-            "role": "user",
-            "content": QEA_USER_PROMPT.format({
-                "question": question,
-                "context": context
-            })
+            "role": QEA_USER_PROMPT.role,
+            "content": prompt_content
         }
         return user_message
 
