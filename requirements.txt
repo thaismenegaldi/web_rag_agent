@@ -13,3 +13,4 @@ pypdf==5.4.0
 sentence-transformers==3.4.1
 numpy==2.0.2
 pandas==2.2.2
+instructor==1.7.8
