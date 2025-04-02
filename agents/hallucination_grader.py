@@ -1,7 +1,6 @@
 from pathlib import Path
 from typing import Dict
 
-from langchain_core.documents.base import Document
 from pydantic import BaseModel
 
 from ..api_clients.groq_chat_client import GroqChatClient
@@ -40,7 +39,7 @@ class HallucinationGrader:
         return user_message
 
     def generate_response(
-        self, documents: str, generation: Document
+        self, documents: str, generation: str
     ) -> HallucinationGraderResponse:
         system_message = self.get_system_message()
         user_message = self.get_user_message(documents, generation)
