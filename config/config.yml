@@ -3,3 +3,8 @@ llm:
   temperature: 0
   top_p: 1
   max_tokens: 1024
+
+retriever:
+  model: "sentence-transformers/all-mpnet-base-v2"
+  chunk_size: 500
+  chunk_overlap: 50
