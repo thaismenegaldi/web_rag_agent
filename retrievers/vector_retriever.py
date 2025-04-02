@@ -11,12 +11,14 @@ class VectorRetriever:
         self.path_to_data = path_to_data
 
     def load_data(self):
+        files = glob(f"{self.path_to_data}/*.pdf")
+
         progress_bar = tqdm(
-            total=len(glob(self.path_to_data)), desc="Loading files..."
+            total=len(files), desc="Loading files..."
         )
         documents = []
 
-        for data_path in glob(self.path_to_data):
+        for data_path in files:
             loader = PyPDFLoader(data_path)
             documents.extend(loader.load())
 
