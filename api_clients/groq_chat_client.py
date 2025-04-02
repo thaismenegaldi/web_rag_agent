@@ -4,10 +4,11 @@ from typing import Type, TypeVar
 
 import groq
 import instructor
-import yaml
 from dotenv import load_dotenv
 from groq import Groq
 from pydantic import BaseModel
+
+from ..utils.load_config import load_yaml_config
 
 # take environment variables
 load_dotenv()
@@ -26,13 +27,7 @@ class GroqChatClient:
             Groq(), mode=instructor.Mode.JSON
         )
 
-        self.config = self._load_yaml_config(config_path)
-
-    @staticmethod
-    def _load_yaml_config(config_path: Path):
-        with open(config_path, "r") as file:
-            config = yaml.safe_load(file)
-            return config
+        self.config = load_yaml_config(config_path)
 
     def generate_response(self, system_message: str, user_message: str) -> str:
         try:
