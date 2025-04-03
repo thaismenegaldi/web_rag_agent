@@ -1,38 +1,34 @@
 from ..prompts.question_answering_prompt import (
     QEA_SYSTEM_PROMPT, QEA_USER_PROMPT
 )
-from ..api_clients.groq_chat_client import GroqChatClient
+from .base_agent import BaseAgent
 from pathlib import Path
 from typing import Dict
 
 
-class RetrievalAugmentedGenerator:
+class RetrievalAugmentedGenerator(BaseAgent):
     def __init__(self, retriever, config_path: Path) -> None:
+        super().__init__(config_path)
         self.retriever = retriever
-        self.config_path = config_path
-        self.chat_client = GroqChatClient(config_path=config_path)
 
     def retrieve_context(self, question: str) -> str:
         context = self.retriever.invoke(question)
         return context if context else "No relevant context found."
 
     def get_system_message(self) -> Dict[str, str]:
-        system_message = {
+        return {
             "role": QEA_SYSTEM_PROMPT.role,
             "content": QEA_SYSTEM_PROMPT.format()
         }
-        return system_message
 
     def get_user_message(self, question: str, context: str) -> Dict[str, str]:
-        prompt_content = QEA_USER_PROMPT.format({
-            "question": question,
-            "context": context
-        })
-        user_message = {
+        return {
             "role": QEA_USER_PROMPT.role,
-            "content": prompt_content
+            "content": QEA_USER_PROMPT.format({
+                "question": question,
+                "context": context
+            })
         }
-        return user_message
 
     def generate_response(self, question: str) -> str:
         context = self.retrieve_context(question)
