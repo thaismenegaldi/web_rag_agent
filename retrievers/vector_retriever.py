@@ -6,6 +6,7 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.vectorstores import FAISS
 from langchain_community.embeddings import HuggingFaceEmbeddings
 from ..utils.load_config import load_yaml_config
+from langchain_core.vectorstores.base import VectorStoreRetriever
 
 
 class VectorRetriever:
@@ -13,7 +14,7 @@ class VectorRetriever:
         self.path_to_data = path_to_data
         self.config = load_yaml_config(config_path)
 
-    def load_data(self):
+    def load_data(self) -> VectorStoreRetriever:
         files = glob(f"{self.path_to_data}/*.pdf")
 
         progress_bar = tqdm(
