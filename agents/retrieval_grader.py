@@ -23,7 +23,7 @@ class RetrievalGrader(BaseAgent):
             "content": RETRIEVAL_SYSTEM_PROMPT.format(),
         }
 
-    def get_user_message(self, question: str, document: str) -> Dict[str, str]:
+    def get_user_message(self, question: str, document: Document) -> Dict[str, str]:
         return {
             "role": RETRIEVAL_USER_PROMPT.role,
             "content": RETRIEVAL_USER_PROMPT.format(
