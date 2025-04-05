@@ -1,14 +1,12 @@
 import os
+from dotenv import load_dotenv
+import groq
 from pathlib import Path
 from typing import Type, TypeVar
-
-import groq
-import instructor
-from dotenv import load_dotenv
-from groq import Groq
 from pydantic import BaseModel
-
-from ..utils.load_config import load_yaml_config
+import instructor
+from groq import Groq
+from utils.load_config import load_yaml_config
 
 # take environment variables
 load_dotenv()
@@ -26,30 +24,33 @@ class GroqChatClient:
         self.groq_instructor = instructor.from_groq(
             Groq(), mode=instructor.Mode.JSON
         )
-
         self.config = load_yaml_config(config_path)
 
-    def generate_response(self, system_message: str, user_message: str) -> str:
+    def generate_response(self, system_message: str, user_message: str):
         try:
             response = self.groq_client.chat.completions.create(
                 model=self.config["llm"]["model"],
-                messages=[system_message, user_message],
+                messages=[
+                    system_message,
+                    user_message
+                ],
                 temperature=self.config["llm"]["temperature"],
                 top_p=self.config["llm"]["top_p"],
-                max_tokens=self.config["llm"]["max_tokens"],
+                max_tokens=self.config["llm"]["max_tokens"]
             )
 
             return response.choices[0].message.content
         except Exception as e:
             raise RuntimeError(f"Failed to generate response: {e}")
 
-    def generate_structured_response(
-        self, system_message: str, user_message: str, response_model: Type[T]
-    ) -> T:
+    def generate_structured_response(self, system_message: str, user_message: str, response_model: Type[T]) -> T:
         try:
             response = self.groq_instructor.chat.completions.create(
                 model=self.config["llm"]["model"],
-                messages=[system_message, user_message],
+                messages=[
+                    system_message,
+                    user_message
+                ],
                 temperature=self.config["llm"]["temperature"],
                 top_p=self.config["llm"]["top_p"],
                 max_tokens=self.config["llm"]["max_tokens"],
