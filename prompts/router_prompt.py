@@ -5,9 +5,9 @@ ROUTER_SYSTEM_PROMPT = Prompt(
     name="router_system",
     prompt_template=(
         """
-        You are an expert at routing user questions to either a vectorstore or
+        You are an expert at routing user questions to either a vector_store or
         web search based on their topic.
-            - Use "vectorstore" for questions related to  Harry Potter, the
+            - Use "vector_store" for questions related to  Harry Potter, the
             wizarding world, magical creatures, spells, characters,
             or similar themes.
             - Use "web_search" for all other topics.
@@ -20,13 +20,13 @@ ROUTER_SYSTEM_PROMPT = Prompt(
         Answer: {{"datasource": "web_search"}}
 
         Question: What is the Accio spell used for??
-        Answer: {{"datasource": "vectorstore"}}
+        Answer: {{"datasource": "vector_store"}}
 
         Question: What are the La Liga next fixtures?
-        Answer: {{"datasource": "vectorstore"}}
+        Answer: {{"datasource": "vector_store"}}
 
         Question: What is prompt engineering?
-        Answer: {{"datasource": "vectorstore"}}
+        Answer: {{"datasource": "vector_store"}}
         """
     )
 )
