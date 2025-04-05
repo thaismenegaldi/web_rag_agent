@@ -1,4 +1,4 @@
-from graph_elements import GraphElements
+from agents.graph_elements import GraphElements
 
 
 class RunAgent:

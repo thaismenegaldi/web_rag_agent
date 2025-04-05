@@ -2,11 +2,11 @@ from typing import Dict, KeysView, List, Union
 
 from pydantic import BaseModel
 
-from ..prompts.search_parser_promt import (
+from prompts.search_parser_promt import (
     SEARCH_SYSTEM_PROMPT,
     SEARCH_USER_PROMPT,
 )
-from .base_agent import BaseAgent
+from agents.base_agent import BaseAgent
 
 
 class ParserResponse(BaseModel):

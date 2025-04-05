@@ -1,4 +1,4 @@
-from prompt import Prompt
+from prompts.prompt import Prompt
 
 HALLUCINATION_SYSTEM_PROMPT = Prompt(
     role="system",

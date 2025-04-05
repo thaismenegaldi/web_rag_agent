@@ -2,11 +2,11 @@ from typing import Dict
 
 from pydantic import BaseModel
 
-from ..prompts.hallucination_grader_prompt import (
+from prompts.hallucination_grader_prompt import (
     HALLUCINATION_SYSTEM_PROMPT,
     HALLUCINATION_USER_PROMPT,
 )
-from .base_agent import BaseAgent
+from agents.base_agent import BaseAgent
 
 
 class HallucinationGraderResponse(BaseModel):

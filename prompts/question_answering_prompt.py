@@ -1,4 +1,4 @@
-from prompt import Prompt
+from prompts.prompt import Prompt
 
 QEA_SYSTEM_PROMPT = Prompt(
     role="system",

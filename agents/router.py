@@ -2,11 +2,11 @@ from typing import Dict
 
 from pydantic import BaseModel
 
-from ..prompts.router_prompt import (
+from prompts.router_prompt import (
     ROUTER_SYSTEM_PROMPT,
     ROUTER_USER_PROMPT,
 )
-from .base_agent import BaseAgent
+from agents.base_agent import BaseAgent
 
 
 class RouterResponse(BaseModel):

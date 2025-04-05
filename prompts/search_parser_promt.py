@@ -1,4 +1,4 @@
-from prompt import Prompt
+from prompts.prompt import Prompt
 
 SEARCH_SYSTEM_PROMPT = Prompt(
     role="system",

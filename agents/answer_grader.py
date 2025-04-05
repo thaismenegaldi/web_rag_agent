@@ -2,11 +2,11 @@ from typing import Dict
 
 from pydantic import BaseModel
 
-from ..prompts.answer_grader_prompt import (
+from prompts.answer_grader_prompt import (
     ANSWER_SYSTEM_PROMPT,
     ANSWER_USER_PROMPT,
 )
-from .base_agent import BaseAgent
+from agents.base_agent import BaseAgent
 
 
 class AnswerGraderResponse(BaseModel):

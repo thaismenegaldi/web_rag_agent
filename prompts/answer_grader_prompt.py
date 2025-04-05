@@ -1,4 +1,4 @@
-from prompt import Prompt
+from prompts.prompt import Prompt
 
 ANSWER_SYSTEM_PROMPT = Prompt(
     role="system",

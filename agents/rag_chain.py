@@ -1,7 +1,7 @@
-from ..prompts.question_answering_prompt import (
+from prompts.question_answering_prompt import (
     QEA_SYSTEM_PROMPT, QEA_USER_PROMPT
 )
-from .base_agent import BaseAgent
+from agents.base_agent import BaseAgent
 from pathlib import Path
 from typing import Dict, List, Union
 from langchain.schema import Document

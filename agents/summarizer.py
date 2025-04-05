@@ -1,10 +1,10 @@
 from typing import Dict, KeysView, List, Union
 
-from ..prompts.summarizer_prompt import (
+from prompts.summarizer_prompt import (
     SUMMARIZER_SYSTEM_PROMPT,
     SUMMARIZER_USER_PROMPT,
 )
-from .base_agent import BaseAgent
+from agents.base_agent import BaseAgent
 
 
 class Summarizer(BaseAgent):

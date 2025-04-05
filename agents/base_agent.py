@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from pathlib import Path
 from typing import Dict
 
-from ..api_clients.groq_chat_client import GroqChatClient
+from api_clients.groq_chat_client import GroqChatClient
 
 
 class BaseAgent(ABC):
