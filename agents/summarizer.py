@@ -21,7 +21,7 @@ class Summarizer(BaseAgent):
         return {
             "role": SUMMARIZER_USER_PROMPT.role,
             "content": SUMMARIZER_USER_PROMPT.format(
-                {"question": question, "data": context}
+                {"question": question, "context": context}
             ),
         }
 
