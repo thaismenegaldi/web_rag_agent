@@ -19,7 +19,7 @@ SEARCH_SYSTEM_PROMPT = Prompt(
         Answer: {{"field": "sports_results"}}
 
         Question: Brazilian's 2025 holidays?
-        Answer: {{"field": "organic_results"}}
+        Answer: {{"field": "answer_box"}}
         """
     )
 )
