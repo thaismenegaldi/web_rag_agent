@@ -1,18 +1,20 @@
-from typing_extensions import TypedDict
-from typing import List
 import logging
+from typing import List
+
+from langchain.schema import Document
 from langchain_core.vectorstores.base import VectorStoreRetriever
-from agents.retrieval_grader import RetrievalGrader
+from langgraph.graph import END, StateGraph
+from typing_extensions import TypedDict
+
+from agents.answer_grader import AnswerGrader
+from agents.hallucination_grader import HallucinationGrader
 from agents.rag_chain import RetrievalAugmentedGenerator
+from agents.retrieval_grader import RetrievalGrader
+from agents.router import Router
 from agents.search_parser import SearchParser
 from agents.summarizer import Summarizer
-from agents.router import Router
-from agents.hallucination_grader import HallucinationGrader
-from agents.answer_grader import AnswerGrader
 from api_clients.serp_api_client import SerpAPIClient
 from utils.log_agent import log_agent_step
-from langchain.schema import Document
-from langgraph.graph import END, StateGraph
 
 logging.basicConfig(
     level=logging.INFO,
@@ -23,7 +25,7 @@ logging.basicConfig(
 
 class GraphState(TypedDict):
     """
-    Represents the state of our graph.
+    Represents the state of the graph.
 
     Attributes:
         question: question
@@ -31,6 +33,7 @@ class GraphState(TypedDict):
         web_search: whether to add search
         documents: list of documents
     """
+
     question: str
     generation: str
     web_search: str
@@ -45,8 +48,7 @@ class GraphElements:
         self.retriever = retriever
         self.retrieval_grader = RetrievalGrader(config_path=config_path)
         self.rag_pipeline = RetrievalAugmentedGenerator(
-            retriever=retriever,
-            config_path=config_path
+            retriever=retriever, config_path=config_path
         )
         self.search_parser = SearchParser(config_path=config_path)
         self.router = Router(config_path=config_path)
@@ -54,23 +56,19 @@ class GraphElements:
         self.hallucination_grader = HallucinationGrader(
             config_path=config_path
         )
-        self.answer_grader = AnswerGrader(
-            config_path=config_path
-        )
+        self.answer_grader = AnswerGrader(config_path=config_path)
 
     def route_question(self, state: GraphState) -> str:
         log_agent_step("Route user's question")
         question = state["question"]
 
-        router_response = self.router.generate_response(
-            question=question
-        )
+        router_response = self.router.generate_response(question=question)
 
-        if router_response.datasource == 'web_search':
+        if router_response.datasource == "web_search":
             logging.info("Route question to web search")
             return "search_in_web"
 
-        elif router_response.datasource == 'vector_store':
+        elif router_response.datasource == "vector_store":
             logging.info("Route question to rag")
             return "vector_store"
 
@@ -106,7 +104,11 @@ class GraphElements:
             logging.info("No relevant documents found!")
             web_search = "Yes"
 
-        return {"documents": filtered_docs, "question": question, "web_search": web_search}
+        return {
+            "documents": filtered_docs,
+            "question": question,
+            "web_search": web_search,
+        }
 
     def web_search(self, state: GraphState) -> GraphState:
         log_agent_step("Web search")
@@ -123,8 +125,7 @@ class GraphElements:
             # web search
             response = SerpAPIClient().search_tool(query=question)
             search_parser_response = self.search_parser.generate_response(
-                question=question,
-                context=response.keys()
+                question=question, context=response.keys()
             )
             field = search_parser_response.field
 
@@ -132,8 +133,7 @@ class GraphElements:
 
             # # process output
             summarizer_response = self.summarizer.generate_response(
-                question=question,
-                context=response[field]
+                question=question, context=response[field]
             )
         else:
             summarizer_response = "Reached max retries."
@@ -141,7 +141,12 @@ class GraphElements:
         # Web search
         web_results = Document(page_content=summarizer_response)
         documents = [web_results]
-        return {"documents": documents, "question": question, "web_result": summarizer_response, "retry_count": retry_count}
+        return {
+            "documents": documents,
+            "question": question,
+            "web_result": summarizer_response,
+            "retry_count": retry_count,
+        }
 
     def decide_to_generate(self, state: GraphState) -> str:
         logging.info("Assessing graded documents")
@@ -167,15 +172,19 @@ class GraphElements:
 
         elif web_result is None:
             logging.info("Checking hallucination")
-            hallucination_grader_response = self.hallucination_grader.generate_response(
-                documents=documents, generation=generation
+            hallucination_grader_response = (
+                self.hallucination_grader.generate_response(
+                    documents=documents, generation=generation
+                )
             )
             hallucination_grade = hallucination_grader_response.score
 
             if hallucination_grade == "yes":
                 logging.info("Decision: generation is based on the documents")
             else:
-                logging.info("Decision: generation is not based on the documents")
+                logging.info(
+                    "Decision: generation is not based on the documents"
+                )
                 return "not supported"
 
         logging.info("Checking generation with user's question")
@@ -188,7 +197,9 @@ class GraphElements:
             logging.info("Decision: generation addresses user's question")
             return "useful"
         else:
-            logging.info("Decision: generation do not addresses user's question")
+            logging.info(
+                "Decision: generation do not addresses user's question"
+            )
             return "not useful"
 
     def generate(self, state: GraphState) -> GraphState:
@@ -198,14 +209,21 @@ class GraphElements:
         web_result = state.get("web_result", None)
 
         if web_result is not None:
-            return {"documents": documents, "question": question, "generation": web_result}
+            return {
+                "documents": documents,
+                "question": question,
+                "generation": web_result,
+            }
 
         else:
             rag_generation = self.rag_pipeline.generate_response(
-                question=question,
-                context=documents
+                question=question, context=documents
             )
-            return {"documents": documents, "question": question, "generation": rag_generation}
+            return {
+                "documents": documents,
+                "question": question,
+                "generation": rag_generation,
+            }
 
     def add_nodes(self) -> StateGraph:
         agent_graph = StateGraph(GraphState)

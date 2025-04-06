@@ -1,10 +1,13 @@
-from prompts.question_answering_prompt import (
-    QEA_SYSTEM_PROMPT, QEA_USER_PROMPT
-)
-from agents.base_agent import BaseAgent
 from pathlib import Path
 from typing import Dict, List, Union
+
 from langchain.schema import Document
+
+from agents.base_agent import BaseAgent
+from prompts.question_answering_prompt import (
+    QEA_SYSTEM_PROMPT,
+    QEA_USER_PROMPT,
+)
 
 
 class RetrievalAugmentedGenerator(BaseAgent):
@@ -19,19 +22,22 @@ class RetrievalAugmentedGenerator(BaseAgent):
     def get_system_message(self) -> Dict[str, str]:
         return {
             "role": QEA_SYSTEM_PROMPT.role,
-            "content": QEA_SYSTEM_PROMPT.format()
+            "content": QEA_SYSTEM_PROMPT.format(),
         }
 
-    def get_user_message(self, question: str, context: Union[Document, List]) -> Dict[str, str]:
+    def get_user_message(
+        self, question: str, context: Union[Document, List]
+    ) -> Dict[str, str]:
         return {
             "role": QEA_USER_PROMPT.role,
-            "content": QEA_USER_PROMPT.format({
-                "question": question,
-                "context": context
-            })
+            "content": QEA_USER_PROMPT.format(
+                {"question": question, "context": context}
+            ),
         }
 
-    def generate_response(self, question: str, context: Union[Document, List]) -> str:
+    def generate_response(
+        self, question: str, context: Union[Document, List]
+    ) -> str:
         context = self.retrieve_context(question)
         system_message = self.get_system_message()
         user_message = self.get_user_message(question, context)

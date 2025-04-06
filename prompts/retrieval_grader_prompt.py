@@ -19,7 +19,7 @@ RETRIEVAL_SYSTEM_PROMPT = Prompt(
         Return your response as a JSON with two keys:
         'score' (either 'yes' or 'no') and 'explanation'.
         """
-    )
+    ),
 )
 
 RETRIEVAL_USER_PROMPT = Prompt(
@@ -33,5 +33,5 @@ RETRIEVAL_USER_PROMPT = Prompt(
         Here is the user question:
         {question}
         """
-    )
+    ),
 )

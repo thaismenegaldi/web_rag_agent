@@ -28,7 +28,7 @@ ROUTER_SYSTEM_PROMPT = Prompt(
         Question: What is prompt engineering?
         Answer: {{"datasource": "vector_store"}}
         """
-    )
+    ),
 )
 
 ROUTER_USER_PROMPT = Prompt(
@@ -39,5 +39,5 @@ ROUTER_USER_PROMPT = Prompt(
         Question to route:
         {question}
         """
-    )
+    ),
 )

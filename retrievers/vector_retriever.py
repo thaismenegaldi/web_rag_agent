@@ -1,12 +1,13 @@
-from tqdm import tqdm
+import logging
 from pathlib import Path
-from langchain_community.document_loaders import PyPDFLoader
+
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.vectorstores import FAISS
+from langchain_community.document_loaders import PyPDFLoader
 from langchain_community.embeddings import HuggingFaceEmbeddings
-from utils.load_config import load_yaml_config
-import logging
+from tqdm import tqdm
 
+from utils.load_config import load_yaml_config
 
 logging.basicConfig(
     level=logging.INFO,
@@ -26,9 +27,7 @@ class VectorRetriever:
         pdf_files = list(data_path.glob("*.pdf"))
 
         if "faiss_index" not in entries:
-            progress_bar = tqdm(
-                total=len(pdf_files), desc="Loading files..."
-            )
+            progress_bar = tqdm(total=len(pdf_files), desc="Loading files...")
             documents = []
 
             for data_path in pdf_files:
@@ -41,7 +40,7 @@ class VectorRetriever:
 
             text_splitter = RecursiveCharacterTextSplitter(
                 chunk_size=self.config["retriever"]["chunk_size"],
-                chunk_overlap=self.config["retriever"]["chunk_overlap"]
+                chunk_overlap=self.config["retriever"]["chunk_overlap"],
             )
             texts = text_splitter.split_documents(documents)
 
@@ -59,11 +58,8 @@ class VectorRetriever:
             )
 
             vector_store = FAISS.load_local(
-                "faiss_index",
-                embeddings,
-                allow_dangerous_deserialization=True
+                "faiss_index", embeddings, allow_dangerous_deserialization=True
             )
-
 
         retriever = vector_store.as_retriever()
 

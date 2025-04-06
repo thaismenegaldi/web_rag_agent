@@ -2,11 +2,8 @@ from typing import Dict
 
 from pydantic import BaseModel
 
-from prompts.router_prompt import (
-    ROUTER_SYSTEM_PROMPT,
-    ROUTER_USER_PROMPT,
-)
 from agents.base_agent import BaseAgent
+from prompts.router_prompt import ROUTER_SYSTEM_PROMPT, ROUTER_USER_PROMPT
 
 
 class RouterResponse(BaseModel):
@@ -21,23 +18,15 @@ class Router(BaseAgent):
             "content": ROUTER_SYSTEM_PROMPT.format(),
         }
 
-    def get_user_message(
-        self, question: str
-    ) -> Dict[str, str]:
+    def get_user_message(self, question: str) -> Dict[str, str]:
         return {
             "role": ROUTER_USER_PROMPT.role,
-            "content": ROUTER_USER_PROMPT.format(
-                {"question": question}
-            ),
+            "content": ROUTER_USER_PROMPT.format({"question": question}),
         }
 
-    def generate_response(
-        self, question: str
-    ) -> RouterResponse:
+    def generate_response(self, question: str) -> RouterResponse:
         system_message = self.get_system_message()
-        user_message = self.get_user_message(
-            question=question
-        )
+        user_message = self.get_user_message(question=question)
 
         response = self.chat_client.generate_structured_response(
             system_message=system_message,

@@ -18,7 +18,7 @@ SUMMARIZER_SYSTEM_PROMPT = Prompt(
             - Pay attention to the details in each JSON entry, do not let
              relevant data behind
         """
-    )
+    ),
 )
 
 SUMMARIZER_USER_PROMPT = Prompt(
@@ -32,5 +32,5 @@ SUMMARIZER_USER_PROMPT = Prompt(
         Raw JSON data:
         {context}
         """
-    )
+    ),
 )

@@ -3,11 +3,11 @@ from typing import Dict
 from langchain_core.documents.base import Document
 from pydantic import BaseModel
 
+from agents.base_agent import BaseAgent
 from prompts.retrieval_grader_prompt import (
     RETRIEVAL_SYSTEM_PROMPT,
     RETRIEVAL_USER_PROMPT,
 )
-from agents.base_agent import BaseAgent
 
 
 class GraderResponse(BaseModel):
@@ -23,7 +23,9 @@ class RetrievalGrader(BaseAgent):
             "content": RETRIEVAL_SYSTEM_PROMPT.format(),
         }
 
-    def get_user_message(self, question: str, document: Document) -> Dict[str, str]:
+    def get_user_message(
+        self, question: str, document: Document
+    ) -> Dict[str, str]:
         return {
             "role": RETRIEVAL_USER_PROMPT.role,
             "content": RETRIEVAL_USER_PROMPT.format(

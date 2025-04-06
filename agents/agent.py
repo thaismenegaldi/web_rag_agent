@@ -4,10 +4,9 @@ from agents.graph_elements import GraphElements
 class RunAgent:
     def __init__(self, retriever, config_path) -> None:
         self.compiled_graph = self.build_agent_graph(
-            retriever=retriever,
-            config_path=config_path
+            retriever=retriever, config_path=config_path
         )
-    
+
     @staticmethod
     def build_agent_graph(retriever, config_path):
         graph_elements = GraphElements(

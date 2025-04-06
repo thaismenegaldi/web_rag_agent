@@ -15,7 +15,7 @@ HALLUCINATION_SYSTEM_PROMPT = Prompt(
         Provide the binary score as a JSON with a single key 'score' and no
         additional explanation.
         """
-    )
+    ),
 )
 
 HALLUCINATION_USER_PROMPT = Prompt(
@@ -29,5 +29,5 @@ HALLUCINATION_USER_PROMPT = Prompt(
         Here is the answer:
         {generation}
         """
-    )
+    ),
 )

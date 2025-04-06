@@ -21,7 +21,7 @@ SEARCH_SYSTEM_PROMPT = Prompt(
         Question: Brazilian's 2025 holidays?
         Answer: {{"field": "answer_box"}}
         """
-    )
+    ),
 )
 
 SEARCH_USER_PROMPT = Prompt(
@@ -35,5 +35,5 @@ SEARCH_USER_PROMPT = Prompt(
         Context:
         {context}
         """
-    )
+    ),
 )

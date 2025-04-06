@@ -9,5 +9,6 @@ logging.basicConfig(
     datefmt="%Y-%m-%d %H:%M:%S",
 )
 
+
 def log_agent_step(message: str):
     logging.info(f"[AGENT STEP] {message}")

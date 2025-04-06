@@ -14,7 +14,7 @@ ANSWER_SYSTEM_PROMPT = Prompt(
         Output your decision as a JSON object with a single key "score" and no
         additional explanation.
         """
-    )
+    ),
 )
 
 ANSWER_USER_PROMPT = Prompt(
@@ -27,5 +27,5 @@ ANSWER_USER_PROMPT = Prompt(
 
         Here is the question: {question}
         """
-    )
+    ),
 )
