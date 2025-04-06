@@ -10,10 +10,19 @@ from prompts.hallucination_grader_prompt import (
 
 
 class HallucinationGraderResponse(BaseModel):
+    """
+    The structure of the response from the hallucination grader agent.
+    """
+
     score: str
 
 
 class HallucinationGrader(BaseAgent):
+    """
+    The HallucinationGrader class is responsible for grading the hallucination
+    of a given generation based on the provided documents. It uses a chat client
+    to interact with a language model and generate a structured response.
+    """
 
     def get_system_message(self) -> Dict[str, str]:
         return {

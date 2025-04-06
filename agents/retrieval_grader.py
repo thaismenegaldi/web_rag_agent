@@ -11,11 +11,20 @@ from prompts.retrieval_grader_prompt import (
 
 
 class GraderResponse(BaseModel):
+    """
+    The structure of the response from the retrieval grader agent.
+    """
+
     score: str
     explanation: str
 
 
 class RetrievalGrader(BaseAgent):
+    """
+    The RetrievalGrader class is responsible for grading the
+    documents retrieved by the agent. It uses a language model to evaluate
+    the relevance of the document to the question and provide a score.
+    """
 
     def get_system_message(self) -> Dict[str, str]:
         return {

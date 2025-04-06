@@ -1,4 +1,5 @@
 import logging
+from pathlib import Path
 from typing import List
 
 from langchain.schema import Document
@@ -43,8 +44,21 @@ class GraphState(TypedDict):
 
 
 class GraphElements:
+    """
+    Class that implements the graph elements for the agent.
+    Also, it implements the graph itself.
 
-    def __init__(self, retriever: VectorStoreRetriever, config_path: str):
+    Parameters
+    ----------
+    retriever : VectorStoreRetriever
+        The retriever to use for the agent.
+    config_path : Path
+        Path to the configuration file for the agent.
+    """
+
+    def __init__(
+        self, retriever: VectorStoreRetriever, config_path: Path
+    ) -> None:
         self.retriever = retriever
         self.retrieval_grader = RetrievalGrader(config_path=config_path)
         self.rag_pipeline = RetrievalAugmentedGenerator(
@@ -59,6 +73,19 @@ class GraphElements:
         self.answer_grader = AnswerGrader(config_path=config_path)
 
     def route_question(self, state: GraphState) -> str:
+        """
+        Route the user's question to the appropriate datasource.
+
+        Parameters
+        ----------
+        state : GraphState
+            The state of the graph.
+
+        Returns
+        -------
+        str
+            The name of the next node to execute.
+        """
         log_agent_step("Route user's question")
         question = state["question"]
 
@@ -73,6 +100,19 @@ class GraphElements:
             return "vector_store"
 
     def retrieve(self, state: GraphState) -> GraphState:
+        """
+        Retrieve documents from the vector store.
+
+        Parameters
+        ----------
+        state : GraphState
+            The state of the graph.
+
+        Returns
+        -------
+        GraphState
+            The state of the graph with the retrieved documents.
+        """
         log_agent_step("Retrieve")
         question = state["question"]
 
@@ -80,6 +120,19 @@ class GraphElements:
         return {"documents": documents, "question": question}
 
     def grade_documents(self, state: GraphState) -> GraphState:
+        """
+        Judge the relevance of the retrieved documents to the user's question.
+
+        Parameters
+        ----------
+        state : GraphState
+            The state of the graph.
+
+        Returns
+        -------
+        GraphState
+            The state of the graph with the graded documents.
+        """
         logging.info("Checking documents relevance to the question")
         question = state["question"]
         documents = state["documents"]
@@ -111,6 +164,20 @@ class GraphElements:
         }
 
     def web_search(self, state: GraphState) -> GraphState:
+        """
+        Perform a web search to find relevant information to answer the user's
+        question.
+
+        Parameters
+        ----------
+        state : GraphState
+            The state of the graph.
+
+        Returns
+        -------
+        GraphState
+            The state of the graph with the web search results.
+        """
         log_agent_step("Web search")
         question = state["question"]
         retry_count = state.get("retry_count", 0)
@@ -149,6 +216,19 @@ class GraphElements:
         }
 
     def decide_to_generate(self, state: GraphState) -> str:
+        """
+        Decide whether to generate a response or perform a web search.
+
+        Parameters
+        ----------
+        state : GraphState
+            The state of the graph.
+
+        Returns
+        -------
+        str
+            The name of the next node to execute.
+        """
         logging.info("Assessing graded documents")
         web_search = state["web_search"]
 
@@ -160,6 +240,20 @@ class GraphElements:
             return "generate"
 
     def grade_generation(self, state: GraphState) -> str:
+        """
+        Judge the quality of the generated response based on the user's question
+        and determines if it is useful or not.
+
+        Parameters
+        ----------
+        state : GraphState
+            The state of the graph.
+
+        Returns
+        -------
+        str
+            The grade of the generation.
+        """
         logging.info("Grading generation")
 
         question = state["question"]
@@ -203,6 +297,20 @@ class GraphElements:
             return "not useful"
 
     def generate(self, state: GraphState) -> GraphState:
+        """
+        Generate a response based on the user's question and the retrieved
+        documents or web search results.
+
+        Parameters
+        ----------
+        state : GraphState
+            The state of the graph.
+
+        Returns
+        -------
+        GraphState
+            The state of the graph with the generated response.
+        """
         log_agent_step("Generate")
         question = state["question"]
         documents = state["documents"]
@@ -226,6 +334,14 @@ class GraphElements:
             }
 
     def add_nodes(self) -> StateGraph:
+        """
+        Add nodes to the agent graph.
+
+        Returns
+        -------
+        StateGraph
+            The agent graph with the added nodes.
+        """
         agent_graph = StateGraph(GraphState)
 
         agent_graph.add_node("search_in_web", self.web_search)
@@ -236,6 +352,19 @@ class GraphElements:
         return agent_graph
 
     def add_edges(self, agent_graph: StateGraph) -> StateGraph:
+        """
+        Add edges to the agent graph.
+
+        Parameters
+        ----------
+        agent_graph : StateGraph
+            The agent graph to add edges to.
+
+        Returns
+        -------
+        StateGraph
+            The agent graph with the added edges.
+        """
         agent_graph.set_conditional_entry_point(
             self.route_question,
             {
@@ -267,6 +396,14 @@ class GraphElements:
         return agent_graph
 
     def build_graph(self) -> StateGraph:
+        """
+        Build and compile the agent graph.
+
+        Returns
+        -------
+        StateGraph
+            The compiled agent graph.
+        """
         agent_graph = self.add_nodes()
         agent_graph = self.add_edges(agent_graph)
         compile_graph = agent_graph.compile()

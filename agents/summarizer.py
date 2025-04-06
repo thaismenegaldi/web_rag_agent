@@ -8,6 +8,10 @@ from prompts.summarizer_prompt import (
 
 
 class Summarizer(BaseAgent):
+    """
+    Summarizer agent that generates a summary of the given context.
+    It uses a chat client to interact with the language model.
+    """
 
     def get_system_message(self) -> Dict[str, str]:
         return {

@@ -7,10 +7,19 @@ from prompts.router_prompt import ROUTER_SYSTEM_PROMPT, ROUTER_USER_PROMPT
 
 
 class RouterResponse(BaseModel):
+    """
+    The structure of the response from the router agent.
+    """
+
     datasource: str
 
 
 class Router(BaseAgent):
+    """
+    The Router class is responsible for routing the question
+    to the appropriate agent. It uses a language model to
+    determine which agent should handle the question.
+    """
 
     def get_system_message(self) -> Dict[str, str]:
         return {

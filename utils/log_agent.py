@@ -10,5 +10,13 @@ logging.basicConfig(
 )
 
 
-def log_agent_step(message: str):
+def log_agent_step(message: str) -> None:
+    """
+    Log a message indicating the step of the agent's process.
+
+    Parameters
+    ----------
+    message : str
+        The message to be logged.
+    """
     logging.info(f"[AGENT STEP] {message}")

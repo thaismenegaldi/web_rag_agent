@@ -11,6 +11,20 @@ from prompts.question_answering_prompt import (
 
 
 class RetrievalAugmentedGenerator(BaseAgent):
+    """
+    A class that implements a retrieval-augmented generation (RAG) agent.
+    It retrieves relevant context from a retriever and generates a response
+    using a language model.
+
+    Parameters
+    ----------
+    retriever : object
+        An object that retrieves relevant context based on the question.
+    config_path : Path
+        Path to the configuration file for the agent. This file is used to
+        initialize the GroqChatClient in the BaseAgent class.
+    """
+
     def __init__(self, retriever, config_path: Path) -> None:
         super().__init__(config_path)
         self.retriever = retriever

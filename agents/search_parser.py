@@ -10,10 +10,20 @@ from prompts.search_parser_promt import (
 
 
 class ParserResponse(BaseModel):
+    """
+    The structure of the response from the search parser agent.
+    """
+
     field: str
 
 
 class SearchParser(BaseAgent):
+    """
+    The SearchParser class is responsible for parsing the search
+    results and extracting the relevant information. It uses a
+    language model to analyze the search results and provide a
+    structured response.
+    """
 
     def get_system_message(self) -> Dict[str, str]:
         return {
