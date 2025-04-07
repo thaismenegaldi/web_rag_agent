@@ -1,1 +1,7 @@
-.env_agent
+.env
+.vscode/
+*.pkl
+*.zip
+*.csv
+*.parquet
+*__pycache__
