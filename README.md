@@ -25,6 +25,14 @@ This agent answers questions using a dynamic reasoning loop:
 - 🔁 Repeats until a helpful answer is found or decides the question is unsupported.
 
 ## 🪄 How to Use
+In this example, you will:
+- Build the vector store.
+
+- Initialize the agent with your config and retriever.
+
+- Ask a question.
+
+- Get a context-aware answer — or a web-sourced one if needed!
 
 ```python
 from IPython.display import display, Markdown
