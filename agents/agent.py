@@ -3,6 +3,7 @@ from pathlib import Path
 from langchain_core.vectorstores.base import VectorStoreRetriever
 
 from agents.graph_elements import GraphElements
+from langgraph.graph.state import CompiledStateGraph
 
 
 class RunAgent:
@@ -29,7 +30,7 @@ class RunAgent:
     @staticmethod
     def build_agent_graph(
         retriever: VectorStoreRetriever, config_path: Path
-    ) -> GraphElements:
+    ) -> CompiledStateGraph:
         """
         Build the agent graph using the provided retriever and configuration path.
 
@@ -42,7 +43,7 @@ class RunAgent:
 
         Returns
         -------
-        agent_graph : GraphElements
+        agent_graph : CompiledStateGraph
             The compiled agent graph.
         """
         graph_elements = GraphElements(
