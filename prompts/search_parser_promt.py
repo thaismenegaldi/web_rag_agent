@@ -9,7 +9,8 @@ SEARCH_SYSTEM_PROMPT = Prompt(
         user question. Criticize the context based on user's question, and
         find the most usefull field from the context, a list of keys, that
         can have the user's answer. If you don't identify any field usefull,
-        returns 'organic_results'.
+        choose between 'organic_results' and 'answer_box', if they are present
+        in the context.
 
         Return a JSON with a single key 'field' with the chosen ones and
         no preamble or explanation.
